@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Movie {
   final int id;
   final String title;
@@ -19,7 +17,7 @@ class Movie {
       posterPath: json['poster_path'],
       backdropPath: json['backdrop_path'],
       releaseDate: json['release_date'],
-      voteAverage: json['vote_average'].toDouble(),
+      voteAverage: json['vote_average'],
     );
   }
 }
