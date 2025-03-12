@@ -11,45 +11,52 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ApiServices _apiServices = ApiServices();
-  List<Movie> _allMovies = [];
+  final ApiServices _apiService = ApiServices();
+  List<Movie> _allMovie = [];
   List<Movie> _trendingMovies = [];
   List<Movie> _popularMovies = [];
 
-  Future<void> _loadMovies() async {
-    final List<Map<String, dynamic>> allMovieData = await _apiServices.getAllMovies();
-    final List<Map<String, dynamic>> trendingMoviesData = await _apiServices.getTrendingMovies();
-    final List<Map<String, dynamic>> popularMoviesData = await _apiServices.getPopularMovies();
+  Future<void> _loadMovie() async {
+    final List<Map<String, dynamic>> allMoviesData =
+        await _apiService.getAllMovies();
+    final List<Map<String, dynamic>> TrendingMoviesData =
+        await _apiService.getTrendingMovies();
+    final List<Map<String, dynamic>> popularMoviesData =
+        await _apiService.getPopularMovies();
 
     setState(() {
-      _allMovies = allMovieData.map((e) => Movie.fromJson(e)).toList();
-      _trendingMovies = trendingMoviesData.map((e) => Movie.fromJson(e)).toList();
+      _allMovie = allMoviesData.map((e) => Movie.fromJson(e)).toList();
+      _trendingMovies =
+          TrendingMoviesData.map((e) => Movie.fromJson(e)).toList();
       _popularMovies = popularMoviesData.map((e) => Movie.fromJson(e)).toList();
     });
   }
 
+  @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    _loadMovies();
+    _loadMovie();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("pilem"),),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildMoviesList("All Movies", _allMovies),
-            _buildMoviesList("Trending Movies", _trendingMovies),
-            _buildMoviesList("Popular Movies", _popularMovies),
-          ],
-        ),
+      appBar: AppBar(
+        title: const Text("Pilem"),
       ),
+      body: SingleChildScrollView(
+          child: Column(
+        children: [
+          _buildMoviesList("All Movies", _allMovie),
+          _buildMoviesList("Trending Movies", _trendingMovies),
+          _buildMoviesList("Popular Movies", _popularMovies)
+        ],
+      )),
     );
   }
 
+  @override
   Widget _buildMoviesList(String title, List<Movie> movies) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,38 +71,36 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(
           height: 200,
           child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: movies.length,
-            itemBuilder: (context, index) {
-              final Movie movie = movies[index];
-              return GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailScreen(movie: movie,)
-                  )
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Image.network(
-                        'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                        height: 150,
-                        width: 150,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(height: 5,),
-                      Text(
-                        movie.title.length > 14 ? '${movie.title.substring(0, 10)}...' : movie.title,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+              scrollDirection: Axis.horizontal,
+              itemCount: movies.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Movie movie = movies[index];
+                return GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(movie: movie))),
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        Image.network(
+                          'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                          height: 150,
+                          width: 150,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          movie.title.length > 14
+                              ? '${movie.title.substring(0, 10)}...'
+                              : movie.title,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
+                );
+              }),
         ),
       ],
     );
