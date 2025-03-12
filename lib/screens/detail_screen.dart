@@ -65,20 +65,23 @@ class _DetailScreenState extends State<DetailScreen> {
               children: [
                 Stack(children: [
                   CachedNetworkImage(
-                    imageUrl:
-                        "https://image.tmdb.org/t/p/w500${widget.movie.backdropPath}",
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.blue,
-                        ),
-                      );
-                    },
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
+                      imageUrl:
+                          "https://image.tmdb.org/t/p/w500${widget.movie.backdropPath}",
+                      width: double.infinity,
+                      height: 300,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.blue,
+                          ),
+                        );
+                      },
+                      errorWidget: (context, url, error) {
+                        return const Center(
+                          child: Icon(Icons.error),
+                        );
+                      }),
                   Positioned(
                     bottom: 8,
                     right: 8,

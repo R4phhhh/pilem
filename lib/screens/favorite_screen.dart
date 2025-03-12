@@ -20,7 +20,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<String> favoriteMovieIds =
         prefs.getKeys().where((key) => key.startsWith('movie_')).toList();
-    print('favoriteMovieIds: $favoriteMovieIds');
+    print('favoriteMovies: $favoriteMovieIds');
+
     setState(() {
       _favoriteMovies = favoriteMovieIds
           .map((id) {
@@ -39,6 +40,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     _loadFavoriteMovies();
   }
@@ -62,14 +64,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   height: 50,
                   width: 50,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.blue,
-                      ),
-                    );
-                  },
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
                 title: Text(movie.title),
                 onTap: () {
